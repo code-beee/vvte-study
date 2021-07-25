@@ -18,13 +18,13 @@ style文件目录结构如下：
 
 📁 src
 
-​	📁 styles
+​----📁 styles
 
-​		📁 common
+​--------📁 common
 
-​			📄 font.scss
+​------------📄 font.scss
 
-​		📄 index.scss
+​--------📄 index.scss
 
 
 
