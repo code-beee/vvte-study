@@ -4,7 +4,7 @@
 
 创建样式文件，以scss变量形式编写样式，将样式效果显示到页面。
 
-## 🌈Coding
+## 🍸 准备
 
 安装sass依赖：
 
@@ -35,7 +35,7 @@ styles文件目录结构如下：
 > - common — 存放常用普通样式文件
 > - variable — 存放变量
 
-<br/>
+## 🌈 Coding
 
 `color.scss` 包含颜色值变量，内容如下：
 
@@ -64,7 +64,7 @@ $color-red: #FF2F64;
 
 <br/>
 
-在 `HelloWorld` 中导入样式文件，并给 \<h2\> 标签添加 red 样式：
+在 `HelloWorld.vue` 中导入样式文件，并给 \<h2\> 标签添加 red 样式：
 
 ```vue
 ......
