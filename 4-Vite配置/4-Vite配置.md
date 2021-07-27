@@ -104,7 +104,7 @@ export default defineConfig({
 
     下方为示例，`http-proxyd`的完整选项详见 [此处](https://github.com/http-party/node-http-proxy#options)。
 
-    ```json
+    ```typescript
     export default {
       server: {
         proxy: {
