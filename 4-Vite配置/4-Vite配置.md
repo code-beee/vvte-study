@@ -177,7 +177,7 @@ export default ({ command, mode }) => {
 
 ## 🍸 准备
 
-安装 node 声明依赖：
+安装依赖：
 
 ```bash
 npm install -D @types/node
