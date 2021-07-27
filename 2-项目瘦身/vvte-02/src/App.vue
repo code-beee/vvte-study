@@ -1,15 +1,15 @@
 <template>
-  <Study />
+  <HelloWorld />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Study from "./components/Study.vue";
+import HelloWorld from "./components/HelloWorld.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    Study,
+    HelloWorld,
   },
 });
 </script>
