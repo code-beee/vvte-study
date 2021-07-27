@@ -1,6 +1,8 @@
 # Vite配置
 
-## 配置文件解析
+## 😴做点功课
+
+### 配置文件解析
 
 运行 Vite 时会自动解析项目根目录下名为 `vite.config.js` 的文件。
 
@@ -14,11 +16,11 @@ export default defineConfig({
 })
 ```
 
-## 常用配置项说明
+### 常用配置项说明
 
-详细配置参考 [Vite官网](https://vitejs.cn/config/)
+下面列举了部分常用配置，详细配置参考 [Vite官网](https://vitejs.cn/config/)。
 
-### **base**
+#### **base**
 
 **类型：** `string`
 
@@ -32,7 +34,7 @@ export default defineConfig({
 
 ---
 
-### **plugins**
+#### **plugins**
 
 - **类型：** `(Plugin | Plugin[])[]`
 
@@ -40,7 +42,7 @@ export default defineConfig({
 
 ---
 
-### **resolve.alias**
+#### **resolve.alias**
 
 - **类型：**
 
@@ -52,7 +54,7 @@ export default defineConfig({
 
 ---
 
-### **server.host**
+#### **server.host**
 
 - **类型：** `string`
 
@@ -60,7 +62,7 @@ export default defineConfig({
 
 ---
 
-### **server.port**
+#### **server.port**
 
 - **类型：** `number`
 
@@ -68,7 +70,7 @@ export default defineConfig({
 
 ---
 
-### **server.strictPort**
+#### **server.strictPort**
 
 - **类型：** `boolean`
 
@@ -76,7 +78,7 @@ export default defineConfig({
 
 ---
 
-### **server.https**
+#### **server.https**
 
 - **类型：** `boolean | https.ServerOptions`
 
@@ -86,7 +88,7 @@ export default defineConfig({
 
 ---
 
-### **server.open**
+#### **server.open**
 
 - **类型：** `boolean | string`
 
@@ -94,7 +96,7 @@ export default defineConfig({
 
 ---
 
-### **server.proxy**
+#### **server.proxy**
 
 - **类型：** `Record<string, string | ProxyOptions>`
 
@@ -127,7 +129,7 @@ export default defineConfig({
 
 ---
 
-### **build.outDir**
+#### **build.outDir**
 
 - **类型：** `string`
 - **默认：** `dist`
@@ -136,7 +138,7 @@ export default defineConfig({
 
 ---
 
-### **build.brotliSize**
+#### **build.brotliSize**
 
 - **类型：** `boolean`
 - **默认：** `true`
@@ -145,21 +147,21 @@ export default defineConfig({
 
 ---
 
-### **optimizeDeps.include**
+#### **optimizeDeps.include**
 
 - **类型：** `string[]`
 
     默认情况下，不在 `node_modules` 中的，链接的包不会被预构建。使用此选项可强制预构建链接的包。
 
-## 情景配置
+### 情景配置
 
-如果配置文件需要基于命令（ `serve` 或 `build` ）或者不同场景与模式来决定选项，可以选择导出这样一个函数：
+如果配置文件需要基于命令（  `dev` 或 `build` ）或者不同场景与模式来决定选项，可以选择导出这样一个函数：
 
 ```typescript
 export default ({ command, mode }) => {
-  if (command === 'serve') {
+  if (command === 'dev') {
     return {
-      // serve 独有配置
+      // dev 独有配置
     }
   } else {
     return {
@@ -169,15 +171,23 @@ export default ({ command, mode }) => {
 }
 ```
 
+## 🎯 目标
+
+结合环境变量配置vite，添加别名配置（ resolve.alias ）和服务端（ server ）配置。
+
 ## 🌈Coding
 
-安装 node 声明：
+安装 node 声明依赖：
 
 ```bash
 npm install -D @types/node
 ```
 
-在配置文件中引入环境变量，编辑 `vite.config.js` 输入以下内容：
+<br/>
+
+配置 vite 之前，留意下项目启动时控制台的输出，现在Local 值为 localhost。
+
+`vite.config.js` 代码如下：
 
 ```typescript
 import vue from '@vitejs/plugin-vue'
@@ -189,13 +199,13 @@ export default ({ command, mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   return {
-    // ↓插件配置
+  	// ↓插件配置
     plugins: [vue()],
     // ↓解析配置
     resolve: {
       // ↓路径别名
       alias: {
-        // @/xxx => src/xxx
+        // ↓举例：@/abc => src/abc
         '@': resolve(__dirname, "src")
       }
     },
@@ -211,11 +221,16 @@ export default ({ command, mode }) => {
 }
 ```
 
-修改 `App.vue` 以 `@` 方式导入 Study 组件：
+<br/>
+
+上面设置了别名，我们修改 `App.vue` 以 `@` 别名方式导入 HelloWorld 组件：
 
 ```typescript
-import Study from '@/components/Study.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
 ```
 
-> 重启项目后控制台打印的访问地址由 `localhost:3000` 变成了 `127.0.0.1:3000`，说明配置文件已生效。
+## 🎭 结果
+
+- 重启项目后控制台打印的 Local 由 `localhost` 变成了环境变量中的 `127.0.0.1`
+- 在页面能看到以别名方式导入的 HelloWorld 被正常渲染。
 
