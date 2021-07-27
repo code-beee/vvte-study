@@ -1,11 +1,11 @@
 <template>
-  <!-- ↓内容区域 -->
   <div class="flex">
-    <!-- ↓左侧内容 -->
-    <div class="yellow-border">
+    <!-- ↓=====左侧控制区===== -->
+    <div>
       <!-- ↓环境变量demo -->
       <div>
-        <h1 class="red">环境变量</h1>
+        <h2 class="red">环境变量</h2>
+        mode: {{ mode }} <br />
         host: {{ host }} <br />
         port: {{ port }} <br />
         open: {{ open }} <br />
@@ -13,13 +13,11 @@
       </div>
       <!-- ↓路由demo -->
       <div>
-        <h1 class="blue">路由</h1>
+        <h2 class="red">路由</h2>
         <!-- ↓匹配路由path进行跳转 -->
-        <router-link to="/sys/user">Go to User 嵌套路由</router-link> <br />
+        <router-link to="/sys/user">Go to User</router-link> <br />
         <!-- ↓匹配路由name进行跳转，防止硬编码的URL -->
-        <router-link :to="{ name: 'login' }"
-          >Go to Login 非嵌套路由</router-link
-        >
+        <router-link :to="{ name: 'login' }">Go to Login</router-link>
       </div>
       <!-- ↓HTTP请求demo -->
       <div>
@@ -28,22 +26,24 @@
         <button @click="httpPost">post请求</button>
       </div>
     </div>
-    <!-- ↓右侧内容 -->
-    <div class="flex-1 grey-border">
+    <!-- ↓=====右侧展示区===== -->
+    <div class="flex-1">
       {{ state.responseData }}
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
 import "@/styles/index.scss";
+import { defineComponent, reactive } from "vue";
 import { axiosInstance } from "@/utils/http/index";
 
 export default defineComponent({
   name: "Home",
   setup() {
-    // ↓读取环境变量
+    // ↓读取内建环境变量
+    const mode = import.meta.env.MODE;
+    // ↓读取自定义环境变量
     const host = import.meta.env.VITE_HOST;
     const port = import.meta.env.VITE_PORT;
     const open = import.meta.env.VITE_OPEN;
@@ -51,7 +51,7 @@ export default defineComponent({
     // ↓响应式reactive变量
     const state = reactive({
       // ↓请求响应数据
-      responseData: {},
+      responseData: undefined,
     });
     // ↓发送get请求
     const httpGet = () => {
@@ -78,8 +78,9 @@ export default defineComponent({
         });
     };
 
-    // ↓返回变量，使其在html元素中能够读取
+    // ↓返回变量，使支持template获取
     return {
+      mode,
       host,
       port,
       open,

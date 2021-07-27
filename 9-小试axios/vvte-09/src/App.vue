@@ -1,5 +1,5 @@
 <template>
-  <!-- ↓顶级路由出口 -->
+  <!-- ↓总路由视图 -->
   <router-view></router-view>
 </template>
 

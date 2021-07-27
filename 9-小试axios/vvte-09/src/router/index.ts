@@ -18,8 +18,6 @@ const routes = [
       {
         path: '/home',
         name: 'home',
-        // ↓路由别名
-        alias: '/',
         component: () => import('@/views/Home.vue')
       },
       // ↓用户管理

@@ -1,36 +1,12 @@
-# 集成axios
+# 小试axios
 
-## 安装依赖
+## 😴 功课
 
-Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。
-
-安装axios：
-
-```bash
-npm install -S axios
-```
-
-## 创建目录和文件
-
-在 `src` 目录下创建 `utils` 文件夹，用来存放封装的各种工具类和方法。除了 axios 工具外，以后还会有其它工具，最好按功能划分到不同目录，故将 axios 工具放到 http 目录下。
-
-utils文件目录结构如下：
-
-📁 src
-
-----📁 utils
-
---------📁 http
-
-------------📄 index.ts
-
-
-
-## 实例化接口说明
+axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。
 
 实例化 axios 对象的接口为 `create(config?: AxiosRequestConfig): AxiosInstance`，接受一个 AxiosRequestConfig 参数，返回axios 实例 AxiosInstance。
 
-AxiosRequestConfig 的接口属性说明：
+`AxiosRequestConfig` 的接口属性说明：
 
 ```typescript
 export interface AxiosRequestConfig {
@@ -95,7 +71,9 @@ export interface AxiosRequestConfig {
 }
 ```
 
-AxiosInstance 的接口属性说明：
+<br/>
+
+`AxiosInstance` 的接口属性说明：
 
 ```typescript
 export interface AxiosInstance {
@@ -124,38 +102,77 @@ export interface AxiosInstance {
 }
 ```
 
+## 🎯 目标
+
+实例化 axios 对象，发送get、post请求，并将响应数据展示到页面。
+
+## 🍸 准备
+
+安装依赖：
+
+```bash
+npm install -S axios
+```
+
+<br/>
+
+在 `src` 目录下创建 `utils` 文件夹，用来存放工具类和工具方法。
+
+utils文件目录结构如下：
+
+📁 src
+
+----📁 utils
+
+--------📁 http
+
+------------📄 index.ts
+
 ## 🌈Coding
 
-根据上面的实例化接口，在 `/utils/http/index.ts` 创建 axios 实例，代码如下：
+在 `utils/http/index.ts` 创建 axios 对象，代码如下：
 
 ```typescript
 import axios, { AxiosInstance } from 'axios'
 
 // ↓创建axios对象
 export const axiosInstance: AxiosInstance = axios.create({
-  // ↓从环境变量读取VITE_BASE_URL，转换成string类型
+  // ↓从环境变量读取VITE_BASE_URL
   baseURL: import.meta.env.VITE_BASE_URL as string,
-  // ↓从环境变量读取VITE_BASE_TIMEOUT，转换成number类型
-  timeout: new Number(import.meta.env.VITE_BASE_TIMEOUT).valueOf(),
-  // ↓从环境变量读取VITE_BASE_TIMEOUT_MSG，转换成string类型
-  timeoutErrorMessage: import.meta.env.VITE_BASE_TIMEOUT_MSG as string
+  // ↓超时时间
+  timeout: 5000,
+  // ↓超时提示信息
+  timeoutErrorMessage: '请求超时，请稍后尝试。'
 })
-
 ```
 
-------
+<br/>
 
-在 Home 页面添加测试功能，导入 axios 对象，提供get和post方法，点击按钮发送请求。同时将响应数据显示到页面，为了方便查看响应数据，对样式也做了点调整，修改后的 `Home.vue` 代码如下：
+新增 styles/common/display.scss 样式文件，代码如下；
+
+```scss
+.flex {
+  display: flex;
+}
+
+.flex-1{
+  flex: 1;
+}
+```
+
+<br/>
+
+在 `Home.vue` 测试 axios 发送请求，并调整了页面排版，代码如下：
 
 ```vue
 <template>
-  <!-- ↓内容区域 -->
   <div class="flex">
-    <!-- ↓左侧内容 -->
-    <div class="yellow-border">
+    <!-- ↓=====左侧控制区===== -->
+    <div>
       <!-- ↓环境变量demo -->
       <div>
-        <h1 class="red">环境变量</h1>
+        <h2 class="red">环境变量</h2>
+        mode: {{ mode }} <br />
         host: {{ host }} <br />
         port: {{ port }} <br />
         open: {{ open }} <br />
@@ -163,13 +180,11 @@ export const axiosInstance: AxiosInstance = axios.create({
       </div>
       <!-- ↓路由demo -->
       <div>
-        <h1 class="blue">路由</h1>
+        <h2 class="red">路由</h2>
         <!-- ↓匹配路由path进行跳转 -->
-        <router-link to="/sys/user">Go to User 嵌套路由</router-link> <br />
+        <router-link to="/sys/user">Go to User</router-link> <br />
         <!-- ↓匹配路由name进行跳转，防止硬编码的URL -->
-        <router-link :to="{ name: 'login' }"
-          >Go to Login 非嵌套路由</router-link
-        >
+        <router-link :to="{ name: 'login' }">Go to Login</router-link>
       </div>
       <!-- ↓HTTP请求demo -->
       <div>
@@ -178,22 +193,24 @@ export const axiosInstance: AxiosInstance = axios.create({
         <button @click="httpPost">post请求</button>
       </div>
     </div>
-    <!-- ↓右侧内容 -->
-    <div class="flex-1 grey-border">
+    <!-- ↓=====右侧展示区===== -->
+    <div class="flex-1">
       {{ state.responseData }}
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
 import "@/styles/index.scss";
+import { defineComponent, reactive } from "vue";
 import { axiosInstance } from "@/utils/http/index";
 
 export default defineComponent({
   name: "Home",
   setup() {
-    // ↓读取环境变量
+    // ↓读取内建环境变量
+    const mode = import.meta.env.MODE;
+    // ↓读取自定义环境变量
     const host = import.meta.env.VITE_HOST;
     const port = import.meta.env.VITE_PORT;
     const open = import.meta.env.VITE_OPEN;
@@ -228,8 +245,9 @@ export default defineComponent({
         });
     };
 
-    // ↓返回变量，使其在html元素中能够读取
+    // ↓返回变量，使支持template获取
     return {
+      mode,
       host,
       port,
       open,
@@ -243,23 +261,8 @@ export default defineComponent({
 </script>
 ```
 
-> http://jsonplaceholder.typicode.com/ 是个免费的开放API网站。
+> 接口地址是调用的 [免费开放API](http://jsonplaceholder.typicode.com/)
 
-------
+## 🎭 结果
 
-新增了两个边框样式，`box.scss` 代码如下：
-
-```scss
-......
-
-.yellow-border {
-  border: 1px solid $color-yellow
-}
-
-.grey-border {
-  border: 1px solid $color-grey
-}
-```
-
-> 最后到 Home 页面去测试 ，不出意外的话在页面能看到请求的响应数据。
-
+到 Home 页面测试 ，点击按钮发送get和post请求，不出意外的话在页面能看到请求的响应数据。
