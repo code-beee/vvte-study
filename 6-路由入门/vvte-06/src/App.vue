@@ -1,17 +1,17 @@
 <template>
-  <Study />
-  <!-- ↓路由出口，路由匹配到的组件将渲染在这里 -->
+  <HelloWorld />
+  <!-- ↓总路由视图 -->
   <router-view></router-view>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Study from '@/components/Study.vue'
+import HelloWorld from "@/components/HelloWorld.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    Study,
+    HelloWorld,
   },
 });
 </script>
