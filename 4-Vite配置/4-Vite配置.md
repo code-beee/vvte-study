@@ -1,6 +1,6 @@
 # Vite配置
 
-## 😴做点功课
+## 😴功课
 
 ### 配置文件解析
 
@@ -175,7 +175,7 @@ export default ({ command, mode }) => {
 
 结合环境变量配置vite，添加别名配置（ resolve.alias ）和服务端（ server ）配置。
 
-## 🌈Coding
+## 🍸 准备
 
 安装 node 声明依赖：
 
@@ -185,9 +185,11 @@ npm install -D @types/node
 
 <br/>
 
-配置 vite 之前，留意下项目启动时控制台的输出，现在Local 值为 localhost。
+留意当下项目启动时控制台的输出，现在Local 的值为 localhost。
 
-`vite.config.js` 代码如下：
+## 🌈 Coding
+
+配置 vite ，`vite.config.js` 代码如下：
 
 ```typescript
 import vue from '@vitejs/plugin-vue'
