@@ -178,7 +178,9 @@ npm install -D @types/node
 
 ## 🌈 Coding
 
-配置 vite ，`vite.config.js` 代码如下：
+### 配置 vite 
+
+`vite.config.js` 代码如下：
 
 ```typescript
 import vue from '@vitejs/plugin-vue'
