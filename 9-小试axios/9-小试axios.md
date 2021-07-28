@@ -4,7 +4,11 @@
 
 axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。
 
-实例化 axios 对象的接口为 `create(config?: AxiosRequestConfig): AxiosInstance`，接受一个 AxiosRequestConfig 参数，返回axios 实例 AxiosInstance。
+可以直接使用axios静态对象，也可以自己创建一个实例。
+
+创建 axios 实例的接口为 `create(config?: AxiosRequestConfig): AxiosInstance`，接受一个 AxiosRequestConfig 参数，返回axios 实例 AxiosInstance。
+
+<br/>
 
 `AxiosRequestConfig` 的接口属性说明：
 
@@ -104,7 +108,9 @@ export interface AxiosInstance {
 
 ## 🎯 目标
 
-实例化 axios 对象，发送get、post请求，并将响应数据展示到页面。
+- 创建 axios 实例。
+- 配置请求和响应拦截器。
+- 发送get、post请求，控制台输出相应数据。
 
 ## 🍸 准备
 
@@ -128,104 +134,70 @@ utils文件目录结构如下：
 
 ------------📄 index.ts
 
+<br/>
+
+创建 `components/study/Axios.vue` 组件，用来测试axios。
+
 ## 🌈 Coding
 
-在 `utils/http/index.ts` 创建 axios 对象，代码如下：
+在 `utils/http/index.ts` 创建 axios 实例，配置拦截器，代码如下：
 
 ```typescript
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 // ↓创建axios对象
 export const axiosInstance: AxiosInstance = axios.create({
   // ↓从环境变量读取VITE_BASE_URL
   baseURL: import.meta.env.VITE_BASE_URL as string,
-  // ↓超时时间
-  timeout: 5000,
-  // ↓超时提示信息
-  timeoutErrorMessage: '请求超时，请稍后尝试。'
+  // ↓超时时间（10s）
+  timeout: 10 * 1000,
 })
+
+// ↓请求拦截器。在请求发送前，对请求配置做一些处理
+axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
+  console.log('执行请求拦截器');
+  return config
+}, error => {
+  return Promise.reject(error);
+})
+
+// ↓响应拦截器。在then、catch之前对响应数据做一些处理
+axiosInstance.interceptors.response.use((response: AxiosResponse) => {
+  console.log('执行响应拦截器');
+  return response;
+}, error => {
+  return Promise.reject(error);
+})
+
 ```
 
 <br/>
 
-新增 styles/common/display.scss 样式文件，代码如下；
-
-```scss
-.flex {
-  display: flex;
-}
-
-.flex-1{
-  flex: 1;
-}
-```
-
-<br/>
-
-在 `Home.vue` 测试 axios 发送请求，并调整了页面排版，代码如下：
+在 `Axios.vue` 测试 axios 发送请求，代码如下：
 
 ```vue
 <template>
-  <div class="flex">
-    <!-- ↓=====左侧控制区===== -->
-    <div>
-      <!-- ↓环境变量demo -->
-      <div>
-        <h2 class="red">环境变量</h2>
-        mode: {{ mode }} <br />
-        host: {{ host }} <br />
-        port: {{ port }} <br />
-        open: {{ open }} <br />
-        baseUrl: {{ baseUrl }}
-      </div>
-      <!-- ↓路由demo -->
-      <div>
-        <h2 class="red">路由</h2>
-        <!-- ↓匹配路由path进行跳转 -->
-        <router-link to="/sys/user">Go to User</router-link> <br />
-        <!-- ↓匹配路由name进行跳转，防止硬编码的URL -->
-        <router-link :to="{ name: 'login' }">Go to Login</router-link>
-      </div>
-      <!-- ↓HTTP请求demo -->
-      <div>
-        <h1>HTTP请求</h1>
-        <button @click="httpGet">get请求</button>
-        <button @click="httpPost">post请求</button>
-      </div>
-    </div>
-    <!-- ↓=====右侧展示区===== -->
-    <div class="flex-1">
-      {{ state.responseData }}
-    </div>
+  <!-- ↓HTTP请求demo -->
+  <div>
+    <h1>HTTP请求</h1>
+    <button @click="httpGet">get请求</button>
+    <button @click="httpPost">post请求</button>
   </div>
 </template>
 
 <script lang="ts">
-import "@/styles/index.scss";
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
 import { axiosInstance } from "@/utils/http/index";
 
 export default defineComponent({
-  name: "Home",
+  name: "Axios",
   setup() {
-    // ↓读取内建环境变量
-    const mode = import.meta.env.MODE;
-    // ↓读取自定义环境变量
-    const host = import.meta.env.VITE_HOST;
-    const port = import.meta.env.VITE_PORT;
-    const open = import.meta.env.VITE_OPEN;
-    const baseUrl = import.meta.env.VITE_BASE_URL;
-    // ↓响应式reactive变量
-    const state = reactive({
-      // ↓请求响应数据
-      responseData: {},
-    });
     // ↓发送get请求
     const httpGet = () => {
       axiosInstance
         .get("https://jsonplaceholder.typicode.com/posts/1")
         .then((response: any) => {
-          state.responseData = response;
+          console.log(response);
         })
         .catch((error: any) => {
           alert(error);
@@ -235,24 +207,17 @@ export default defineComponent({
     const httpPost = () => {
       axiosInstance
         .post("https://jsonplaceholder.typicode.com/posts", {
-          keyword: "奥运会",
+          keyword: "code",
         })
         .then((response: any) => {
-          state.responseData = response;
+          console.log(response);
         })
         .catch((error: any) => {
           alert(error);
         });
     };
 
-    // ↓返回变量，使支持template获取
     return {
-      mode,
-      host,
-      port,
-      open,
-      baseUrl,
-      state,
       httpGet,
       httpPost,
     };
@@ -265,4 +230,6 @@ export default defineComponent({
 
 ## 🎭 结果
 
-到 Home 页面测试 ，点击按钮发送get和post请求，不出意外的话在页面能看到请求的响应数据。
+点击按钮发送get和post请求，在控制台输出拦截器log和响应数据log。
+
+输出顺序为：执行请求拦截器 > 执行响应拦截器 > 响应数据。
