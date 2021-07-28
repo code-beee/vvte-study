@@ -39,7 +39,9 @@
     // ↓启用所有严格类型检查选项。
     "strict": true,
     // ↓编译过程中需要引入的库文件
-    "lib": ["es2020"],
+    "lib": [
+      "es2020"
+    ],
     // ↓编译时是否生成.map文件
     "sourceMap": true,
     // ↓支持使用import fs from 'fs'的方式引入commonjs包
@@ -52,14 +54,25 @@
     "baseUrl": ".",
     // ↓设置模块名称到基于baseUrl的路径映射
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
   // ↓指定要编译的文件，这些文件名是相对于包含tsconfig.json的目录解析的。
   // ↓支持通配符：* （匹配0或多个字符）、? （匹配一个任意字符）、**/ (递归匹配任意子目录))
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
   // ↓和include一样，不过是指定解析include时应跳过的文件
-  "exclude": ["node_modules", "dist", "**/*.js"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.js"
+  ]
 }
 ```
 
