@@ -22,7 +22,6 @@ export default ({ command, mode }) => {
       // ↓读取环境变量中的HOST、PORT、OPEN
       host: env['VITE_HOST'],
       port: env['VITE_PORT'],
-      open: env['VITE_OPEN'],
       strictPort: true
     }
   }

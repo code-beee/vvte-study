@@ -6,7 +6,7 @@
 
 运行 Vite 时会自动解析项目根目录下名为 `vite.config.js` 的文件。
 
-默认生成的文件内容如下：
+默认生成的文件如下：
 
 ```typescript
 import { defineConfig } from 'vite'
@@ -20,21 +20,21 @@ export default defineConfig({
 
 下面列举了部分常用配置，详细配置参考 [Vite官网](https://vitejs.cn/config/)。
 
-#### **base**
+#### base
 
-**类型：** `string`
+- **类型：** `string`
 
-**默认：** `/`
+- **默认：** `/`
 
-开发或生产环境服务的 公共基础路径。合法的值包括以下几种：
+  开发或生产环境服务的 公共基础路径。合法的值包括以下几种：
 
-- 绝对 URL 路径名，例如 `/foo/`
-- 完整的 URL，例如 `https://foo.com/`
-- 空字符串或 `./`（用于开发环境）
+  - 绝对 URL 路径名，例如 `/foo/`
+  - 完整的 URL，例如 `https://foo.com/`
+  - 空字符串或 `./`（用于开发环境）
 
 ---
 
-#### **plugins**
+#### plugins
 
 - **类型：** `(Plugin | Plugin[])[]`
 
@@ -42,7 +42,7 @@ export default defineConfig({
 
 ---
 
-#### **resolve.alias**
+#### resolve.alias
 
 - **类型：**
 
@@ -54,7 +54,7 @@ export default defineConfig({
 
 ---
 
-#### **server.host**
+#### server.host
 
 - **类型：** `string`
 
@@ -62,7 +62,7 @@ export default defineConfig({
 
 ---
 
-#### **server.port**
+#### server.port
 
 - **类型：** `number`
 
@@ -70,7 +70,7 @@ export default defineConfig({
 
 ---
 
-#### **server.strictPort**
+#### server.strictPort
 
 - **类型：** `boolean`
 
@@ -78,7 +78,7 @@ export default defineConfig({
 
 ---
 
-#### **server.https**
+#### server.https
 
 - **类型：** `boolean | https.ServerOptions`
 
@@ -88,15 +88,7 @@ export default defineConfig({
 
 ---
 
-#### **server.open**
-
-- **类型：** `boolean | string`
-
-    在服务器启动时自动在浏览器中打开应用程序。当此值为字符串时，会被用作 URL 的路径名。
-
----
-
-#### **server.proxy**
+#### server.proxy
 
 - **类型：** `Record<string, string | ProxyOptions>`
 
@@ -129,7 +121,7 @@ export default defineConfig({
 
 ---
 
-#### **build.outDir**
+#### build.outDir
 
 - **类型：** `string`
 - **默认：** `dist`
@@ -138,7 +130,7 @@ export default defineConfig({
 
 ---
 
-#### **build.brotliSize**
+#### build.brotliSize
 
 - **类型：** `boolean`
 - **默认：** `true`
@@ -147,7 +139,7 @@ export default defineConfig({
 
 ---
 
-#### **optimizeDeps.include**
+#### optimizeDeps.include
 
 - **类型：** `string[]`
 
@@ -155,7 +147,7 @@ export default defineConfig({
 
 ### 情景配置
 
-如果配置文件需要基于命令（  `dev` 或 `build` ）或者不同场景与模式来决定选项，可以选择导出这样一个函数：
+如果配置文件需要基于不同模式来处理逻辑，可以选择以下方式：
 
 ```typescript
 export default ({ command, mode }) => {
@@ -173,19 +165,16 @@ export default ({ command, mode }) => {
 
 ## 🎯 目标
 
-结合环境变量配置vite，添加别名配置（ resolve.alias ）和服务端（ server ）配置。
+- 结合环境变量配置vite。
+- 添加别名配置（ resolve.alias ）和服务端（ server ）配置。
 
 ## 🍸 准备
 
-安装依赖：
+### 安装依赖
 
 ```bash
 npm install -D @types/node
 ```
-
-<br/>
-
-留意当下项目启动时控制台的输出，现在Local 的值为 localhost。
 
 ## 🌈 Coding
 
@@ -213,19 +202,18 @@ export default ({ command, mode }) => {
     },
     // ↓服务端配置
     server: {
-      // ↓读取环境变量中的HOST、PORT、OPEN
+      // ↓读取环境变量中的HOST、PORT
       host: env['VITE_HOST'],
       port: env['VITE_PORT'],
-      open: env['VITE_OPEN'],
       strictPort: true
     }
   }
 }
 ```
 
-<br/>
+### 使用别名
 
-上面设置了别名，我们修改 `App.vue` 以 `@` 别名方式导入 HelloWorld 组件：
+修改 `App.vue` 以 `@` 别名方式导入 HelloWorld 组件：
 
 ```typescript
 import HelloWorld from '@/components/HelloWorld.vue'
@@ -233,6 +221,8 @@ import HelloWorld from '@/components/HelloWorld.vue'
 
 ## 🎭 结果
 
-- 重启项目后控制台打印的 Local 由 `localhost` 变成了环境变量中的 `127.0.0.1`
-- 在页面能看到以别名方式导入的 HelloWorld 被正常渲染。
+> 重启之前，留意项目启动时控制台的输出，Local 的值为 `localhost`。
+
+- 重启项目，server配置生效，控制台输出的 Local 值为 `127.0.0.1`。
+- 以别名方式导入的 HelloWorld 正常渲染。
 
