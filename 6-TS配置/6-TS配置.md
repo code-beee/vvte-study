@@ -10,7 +10,7 @@
 
 ### 使用 GitHub 上的基本配置
 
-根据你的 JavaScript 运行时环境（node10、node12、node14、React Native等），可以在 [这里](https://github.com/tsconfig/bases/) 选择基本配置。我们的项目可以基于这些 tsconfig.json 来扩展，达到简化配置的目的。
+根据你的 JavaScript 运行时环境（node10、node12、node14、React Native等），可以在 [这里](https://github.com/tsconfig/bases/) 选择基本配置，基于这些 tsconfig.json 来扩展，可达到简化配置的目的。
 
 ### 配置项说明
 
@@ -22,7 +22,9 @@
 
 ## 🌈 Coding
 
-配置 `tsconfig.json` ，代码如下：
+### 配置TS
+
+`tsconfig.json` 代码如下：
 
 ```json
 {
@@ -61,9 +63,9 @@
 }
 ```
 
-<br/>
+### 用 @ 映射 ts 文件路径
 
-修改 `main.ts` 对 router 的导入，代码如下：
+测试在 `main.ts` 用 @ 导入 router ：
 
 ```typescript
 ......
@@ -75,4 +77,4 @@ import router from '@/router/index'
 
 ## 🎭 结果
 
-router 导入时 VS Code 没有错误提示，项目运行正常。
+用 @ 映射路径导入 router， VS Code 没有错误提示。页面访问正常。
