@@ -1,18 +1,18 @@
-# 引入SCSS
+# 引入scss
 
 ## 🎯 目标
 
-创建样式文件，以scss变量形式编写样式，将样式效果显示到页面。
+以变量形式编写样式。
 
 ## 🍸 准备
 
-安装依赖：
+### 安装依赖
 
 ```bash
 npm install -D sass
 ```
 
-<br/>
+### 调整文件&目录
 
 在 `src` 目录下创建 `styles` 文件夹，用来存放样式文件。
 
@@ -32,20 +32,24 @@ styles文件目录结构如下：
 
 --------📄 index.scss
 
-> - common — 存放常用普通样式文件
+<br/>
+
+> - common — 存放常用样式文件
 > - variable — 存放变量
 
 ## 🌈 Coding
 
-`color.scss` 包含颜色值变量，内容如下：
+### 定义 scss 变量
+
+在 `color.scss` 定义一个颜色变量：
 
 ```scss
 $color-red: #FF2F64;
 ```
 
-<br/>
+### 编写样式
 
-`font.scss` 包含字体相关样式，内容如下：
+在 `font.scss` 编写个字体为红色的样式：
 
 ```scss
 .red {
@@ -53,22 +57,22 @@ $color-red: #FF2F64;
 }
 ```
 
-<br/>
+### 聚合样式文件
 
-`index.scss` 用来聚合 styles 目录下的样式，内容如下：
+在 `index.scss` 聚合 styles 下的样式：
 
 ```scss
 @import './variable/color.scss';
 @import './common/font.scss'
 ```
 
-<br/>
+### 使用样式
 
-在 `HelloWorld.vue` 中导入样式文件，并给 \<h2\> 标签添加 red 样式：
+在 `HelloWorld.vue` 中导入样式文件，给 \<h2\> 标签添加 red 样式：
 
 ```vue
 ......
-<h1 class="red">环境变量</h1>
+<h2 class="red">环境变量</h2>
 ......
 <script lang="ts">
 import '@/styles/index.scss'
@@ -78,5 +82,4 @@ import '@/styles/index.scss'
 
 ## 🎭 结果
 
-回到浏览器刷新页面，标题“环境变量”已经变成红色。
-
+标题“环境变量”变成红色。
