@@ -4,7 +4,7 @@
 
 axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。
 
-可以直接使用axios静态对象，也可以自己创建一个实例。
+可以直接使用 axios 静态对象，也可以自己创建一个实例，为防止静态对象被修改，最好自己创建个实例。
 
 创建 axios 实例的接口为 `create(config?: AxiosRequestConfig): AxiosInstance`，接受一个 AxiosRequestConfig 参数，返回axios 实例 AxiosInstance。
 
@@ -109,18 +109,18 @@ export interface AxiosInstance {
 ## 🎯 目标
 
 - 创建 axios 实例。
-- 配置请求和响应拦截器。
-- 发送get、post请求，控制台输出相应数据。
+- 配置请求拦截器和响应拦截器。
+- 发送get、post请求，控制台输出响应数据。
 
 ## 🍸 准备
 
-安装依赖：
+### 安装依赖
 
 ```bash
 npm install -S axios
 ```
 
-<br/>
+### 调整文件&目录
 
 在 `src` 目录下创建 `utils` 文件夹，用来存放工具类和工具方法。
 
@@ -136,11 +136,13 @@ utils文件目录结构如下：
 
 <br/>
 
-创建 `components/study/Axios.vue` 组件，用来测试axios。
+添加 `components/demos/Axios.vue` 文件，用来测试axios。
 
 ## 🌈 Coding
 
-在 `utils/http/index.ts` 创建 axios 实例，配置拦截器，代码如下：
+### 创建 axios 实例
+
+在 `utils/http/index.ts` 创建 axios 实例，并配置拦截器：
 
 ```typescript
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
@@ -155,7 +157,7 @@ export const axiosInstance: AxiosInstance = axios.create({
 
 // ↓请求拦截器。在请求发送前，对请求配置做一些处理
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
-  console.log('执行请求拦截器');
+  console.log('执行请求拦截器...');
   return config
 }, error => {
   return Promise.reject(error);
@@ -163,7 +165,7 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 
 // ↓响应拦截器。在then、catch之前对响应数据做一些处理
 axiosInstance.interceptors.response.use((response: AxiosResponse) => {
-  console.log('执行响应拦截器');
+  console.log('执行响应拦截器...');
   return response;
 }, error => {
   return Promise.reject(error);
@@ -171,15 +173,15 @@ axiosInstance.interceptors.response.use((response: AxiosResponse) => {
 
 ```
 
-<br/>
+### Demo组件
 
-在 `Axios.vue` 测试 axios 发送请求，代码如下：
+在 `Axios.vue` 测试 axios 发送请求：
 
 ```vue
 <template>
   <!-- ↓HTTP请求demo -->
   <div>
-    <h1>HTTP请求</h1>
+    <h2>HTTP请求</h2>
     <button @click="httpGet">get请求</button>
     <button @click="httpPost">post请求</button>
   </div>
@@ -226,10 +228,36 @@ export default defineComponent({
 </script>
 ```
 
-> 接口地址是调用的 [免费开放API](http://jsonplaceholder.typicode.com/)
+> 💡 接口地址是调用的 [免费开放API](http://jsonplaceholder.typicode.com/)
+
+### Demo汇聚
+
+将 Axios.vue 导入 Home.vue：
+
+```vue
+<template>
+  <Env />
+  <Router />
+  <Axios />
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import Env from "@/components/demos/Env.vue";
+import Router from "@/components/demos/Router.vue";
+import Axios from "@/components/demos/Axios.vue";
+
+export default defineComponent({
+  name: "Home",
+  components: {
+    Env,
+    Router,
+    Axios,
+  },
+});
+</script>
+```
 
 ## 🎭 结果
 
-点击按钮发送get和post请求，在控制台输出拦截器log和响应数据log。
-
-输出顺序为：执行请求拦截器 > 执行响应拦截器 > 响应数据。
+点击按钮发送get和post请求，在控制台输出日志。输出顺序为：“执行请求拦截器...” > "执行响应拦截器... " > 响应数据。

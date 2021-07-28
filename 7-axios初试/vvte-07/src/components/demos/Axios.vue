@@ -1,7 +1,7 @@
 <template>
   <!-- ↓HTTP请求demo -->
   <div>
-    <h1>HTTP请求</h1>
+    <h2>HTTP请求</h2>
     <button @click="httpGet">get请求</button>
     <button @click="httpPost">post请求</button>
   </div>

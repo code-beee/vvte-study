@@ -6,19 +6,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Env from "@/components/study/Env.vue";
-import Axios from "@/components/study/Axios.vue";
-import Router from "@/components/study/Router.vue";
+import Env from "@/components/demos/Env.vue";
+import Router from "@/components/demos/Router.vue";
+import Axios from "@/components/demos/Axios.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
-    Axios,
-    Router,
     Env,
-  },
-  setup() {
-    return {};
+    Router,
+    Axios,
   },
 });
 </script>
