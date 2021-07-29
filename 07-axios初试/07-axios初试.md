@@ -1,4 +1,11 @@
+[TOC]
+
 # 小试axios
+
+## 🎯 目标
+
+- 创建 axios 实例，配置请求拦截器和响应拦截器。
+- 发送get、post请求，控制台输出响应数据。
 
 ## 😴 功课
 
@@ -105,12 +112,6 @@ export interface AxiosInstance {
   patch<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
 }
 ```
-
-## 🎯 目标
-
-- 创建 axios 实例。
-- 配置请求拦截器和响应拦截器。
-- 发送get、post请求，控制台输出响应数据。
 
 ## 🍸 准备
 
@@ -260,4 +261,4 @@ export default defineComponent({
 
 ## 🎭 结果
 
-点击按钮发送get和post请求，在控制台输出日志。输出顺序为：“执行请求拦截器...” > "执行响应拦截器... " > 响应数据。
+点击按钮发送get和post请求，在控制台输出日志。顺序为：“执行请求拦截器...” > "执行响应拦截器... " > 响应数据。
