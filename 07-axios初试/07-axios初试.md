@@ -6,6 +6,7 @@
 
 - 创建 axios 实例，配置请求拦截器和响应拦截器。
 - 发送get、post请求，控制台输出响应数据。
+- 测试取消请求。
 
 ## 😴 功课
 
@@ -148,6 +149,9 @@ utils文件目录结构如下：
 ```typescript
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
+// ↓取消令牌类
+export const CancelToken = axios.CancelToken;
+
 // ↓创建axios对象
 export const axiosInstance: AxiosInstance = axios.create({
   // ↓从环境变量读取VITE_BASE_URL
@@ -172,6 +176,8 @@ axiosInstance.interceptors.response.use((response: AxiosResponse) => {
   return Promise.reject(error);
 })
 
+
+
 ```
 
 ### Demo组件
@@ -185,16 +191,20 @@ axiosInstance.interceptors.response.use((response: AxiosResponse) => {
     <h2>HTTP请求</h2>
     <button @click="httpGet">get请求</button>
     <button @click="httpPost">post请求</button>
+    <button @click="httpCancel">取消请求</button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { axiosInstance } from "@/utils/http/index";
+import { axiosInstance, CancelToken } from "@/utils/http/index";
 
 export default defineComponent({
   name: "Axios",
   setup() {
+    // ↓取消请求函数
+    let cancelRequest = (msg?: string) => {};
+
     // ↓发送get请求
     const httpGet = () => {
       axiosInstance
@@ -219,10 +229,28 @@ export default defineComponent({
           alert(error);
         });
     };
+    // ↓测试取消请求
+    const httpCancel = () => {
+      axiosInstance
+        .get("https://jsonplaceholder.typicode.com/posts/1", {
+          // ↓实例化取消令牌，构造函数执行器接受一个取消函数
+          cancelToken: new CancelToken(function executor(c) {
+            cancelRequest = c;
+          }),
+        })
+        .then((response: any) => {
+          console.log(response);
+        })
+        .catch((error: any) => {
+          alert(error);
+        });
+      cancelRequest("取消请求测试");
+    };
 
     return {
       httpGet,
       httpPost,
+      httpCancel,
     };
   },
 });
@@ -261,4 +289,5 @@ export default defineComponent({
 
 ## 🎭 结果
 
-点击按钮发送get和post请求，在控制台输出日志。顺序为：“执行请求拦截器...” > "执行响应拦截器... " > 响应数据。
+- 点击按钮发送get和post请求，在控制台输出日志。顺序为：“执行请求拦截器...” > "执行响应拦截器... " > 响应数据。
+- 点击取消请求按钮，请求没发出去，报错：“取消请求测试”。

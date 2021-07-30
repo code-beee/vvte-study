@@ -1,5 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
+// ↓取消令牌类
+export const CancelToken = axios.CancelToken;
+
 // ↓创建axios对象
 export const axiosInstance: AxiosInstance = axios.create({
   // ↓从环境变量读取VITE_BASE_URL
@@ -23,3 +26,5 @@ axiosInstance.interceptors.response.use((response: AxiosResponse) => {
 }, error => {
   return Promise.reject(error);
 })
+
+
