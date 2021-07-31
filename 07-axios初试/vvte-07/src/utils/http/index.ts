@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-// ↓取消令牌类
+// ↓取消令牌类，用来中止请求
 export const CancelToken = axios.CancelToken;
 
 // ↓创建axios对象
