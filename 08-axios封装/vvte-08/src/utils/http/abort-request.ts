@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, Canceler } from "axios"
 
-// ↓取消axios请求类
-export class AxiosCancel {
-  // ↓挂起请求map，key=请求识别号，value=请求取消器
+// ↓中止axios请求类
+export class AbortRequest {
+  // ↓执行中的请求map集合。key=请求识别号，value=请求取消器
   private pendingMap = new Map<string, Canceler>()
 
   // ↓生成请求key
@@ -10,7 +10,7 @@ export class AxiosCancel {
     return [config.method, config.url].join('&')
   }
 
-  // ↓添加挂起请求
+  // ↓添加执行中请求
   addPending(config: AxiosRequestConfig) {
     const pendingKey = this.genPendingKey(config)
     console.log('addPending: ', pendingKey)
@@ -22,13 +22,13 @@ export class AxiosCancel {
     })
   }
 
-  // ↓移除挂起请求
+  // ↓移除执行中请求
   removePending(pendingKey: string) {
     console.log('removePending: ', pendingKey)
     this.pendingMap.delete(pendingKey)
   }
 
-  // ↓清空挂起请求
+  // ↓清空执行中请求
   clearPending() {
     this.pendingMap.forEach((value, key) => {
       this.cancelRequest(key)
@@ -36,10 +36,10 @@ export class AxiosCancel {
     this.pendingMap.clear()
   }
 
-  // ↓取消请求
+  // ↓中止执行中请求
   cancelRequest(pendingKey: string): boolean {
     if (this.pendingMap.has(pendingKey)) {
-      console.log('cancelRequest: ', pendingKey)
+      console.log('abortRequest: ', pendingKey)
       const canceler = this.pendingMap.get(pendingKey)
       // TODO 魔法值需配置化
       canceler && canceler('重复请求被取消')

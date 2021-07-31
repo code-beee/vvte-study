@@ -14,13 +14,10 @@ import http from "@/utils/http/index";
 export default defineComponent({
   name: "Axios",
   setup() {
-    // ↓取消请求函数
-    let cancelRequest = (msg?: string) => {};
-
     // ↓发送get请求
     const httpGet = () => {
       http
-        .get("https://jsonplaceholder.typicode.com/posts1/1")
+        .get("https://jsonplaceholder.typicode.com/posts/1")
         .then((response: any) => {
           console.log(response);
         });

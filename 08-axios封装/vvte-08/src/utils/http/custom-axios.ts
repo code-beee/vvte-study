@@ -1,49 +1,42 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Cancel, Canceler } from "axios";
-import { AxiosCancel } from "./axios-cancel";
-
-// ↓自定义请求接口
-interface CustomRequest {
-  // ↓axios配置
-  customConfig?: AxiosRequestConfig;
-  // ↓请求拦截器
-  interceptorRequest?: (value: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>
-  // ↓请求拦截器异常处理
-  interceptorRequestRejected?: (error: any) => any
-  // ↓响应拦截器
-  interceptorResponse?: ((value: AxiosResponse<any>) => AxiosResponse<any> | Promise<AxiosResponse<any>>)
-  // ↓响应拦截器异常处理
-  interceptorResponseRejected?: (error: any) => any
-}
-
-// ↓自定义响应接口
-export interface CustomResponse {
-  // ↓消息
-  message: string;
-  // ↓状态码
-  code: number;
-  // ↓数据集
-  result: any
-}
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AbortRequest } from "./abort-request";
+import { CustomRequest, InterceptorConfig } from "./types";
 
 // ↓自定义axios类
-export class CustomAxios<T extends CustomResponse> {
+export class CustomAxios<T> {
+  // ↓原生axios对象
   private instance: AxiosInstance;
-  private axiosCancel: AxiosCancel
+  // ↓axios请求中止对象
+  private abortRequest: AbortRequest
 
-  constructor(customRequest: CustomRequest = {}) {
-    // ↓获取自定义请求配置
-    const { customConfig, interceptorRequest, interceptorRequestRejected, interceptorResponse, interceptorResponseRejected } = customRequest;
-    // ↓实例化axios对象
-    this.instance = axios.create(customConfig)
-    // ↓实例化取消axios请求对象
-    this.axiosCancel = new AxiosCancel()
+  // ↓构造函数
+  constructor(customRequest: CustomRequest<T>) {
+    this.instance = axios.create(customRequest.customConfig)
+    this.abortRequest = new AbortRequest()
+    this.useInterceptors(customRequest.interceptorConfig)
+  }
+
+  // ↓使用拦截器
+  useInterceptors(config: InterceptorConfig<T>) {
+    // ↓从自定义请求配置获取属性
+    const {
+      enableAbortRequest,
+      interceptorRequest,
+      interceptorRequestRejected,
+      interceptorResponse,
+      interceptorResponseRejected
+    } = config;
 
     // ↓请求拦截器。在请求发送前，对请求配置做一些处理
     this.instance.interceptors.request.use((config: AxiosRequestConfig) => {
-      const pendingKey = this.axiosCancel.genPendingKey(config)
-      if (this.axiosCancel.cancelRequest(pendingKey)) {
-        this.axiosCancel.addPending(config)
+      // ↓如果开启中止请求功能
+      if (enableAbortRequest) {
+        const pendingKey = this.abortRequest.genPendingKey(config)
+        if (this.abortRequest.cancelRequest(pendingKey)) {
+          this.abortRequest.addPending(config)
+        }
       }
+
       if (interceptorRequest) {
         console.log('进入请求拦截器...')
         return interceptorRequest(config)
@@ -59,8 +52,12 @@ export class CustomAxios<T extends CustomResponse> {
 
     // ↓响应拦截器。在then、catch之前对响应数据做一些处理
     this.instance.interceptors.response.use((response: AxiosResponse<T>) => {
-      const pendingKey = this.axiosCancel.genPendingKey(response.config)
-      this.axiosCancel.removePending(pendingKey)
+      // ↓如果开启中止请求功能
+      if (enableAbortRequest) {
+        const pendingKey = this.abortRequest.genPendingKey(response.config)
+        this.abortRequest.removePending(pendingKey)
+      }
+
       if (interceptorResponse) {
         console.log('进入响应拦截器...')
         return interceptorResponse(response)
@@ -75,7 +72,7 @@ export class CustomAxios<T extends CustomResponse> {
     })
   }
 
-  // ↓自定义请求
+  // ↓request请求
   request(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return new Promise((resolve, reject) => {
       this.instance.request(config).then((response) => {
@@ -90,23 +87,22 @@ export class CustomAxios<T extends CustomResponse> {
   }
 
   // ↓get请求
-  get(url: string, params?: object): Promise<AxiosResponse<T>> {
-    return this.request({ url, method: 'GET', params })
+  get(url: string, params?: object, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request({ url, method: 'GET', params, ...config })
   }
 
   // ↓post请求
-  post(url: string, params?: object): Promise<AxiosResponse<T>> {
-    return this.request({ url, method: 'POST', data: params })
+  post(url: string, data?: object, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request({ url, method: 'POST', data, ...config })
   }
 
   // ↓put请求
-  put(url: string, params?: object): Promise<AxiosResponse<T>> {
-    return this.request({ url, method: 'PUT', data: params })
+  put(url: string, data?: object, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request({ url, method: 'PUT', data, ...config })
   }
 
   // ↓delete请求
-  delete(url: string, params?: object): Promise<AxiosResponse<T>> {
-    return this.request({ url, method: 'DELETE', data: params })
+  delete(url: string, data?: object, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request({ url, method: 'DELETE', data, ...config })
   }
-
 }
