@@ -18,21 +18,21 @@ const routes = [
       {
         path: '/home',
         name: 'home',
-        component: () => import('@/views/Home.vue')
+        component: () => import('@/views/Home.vue'),
       },
       // ↓用户管理
       {
         path: '/sys/user',
         name: 'sys-user',
-        component: () => import('@/views/sys/User.vue')
+        component: () => import('@/views/sys/User.vue'),
       },
-    ]
+    ],
   },
   // ↓登录页
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/Login.vue')
+    component: () => import('@/views/Login.vue'),
   },
 ]
 

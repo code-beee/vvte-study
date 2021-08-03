@@ -6,9 +6,9 @@
 
 <script>
 import '@/styles/index.scss'
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "Layout",
-});
+  name: 'Layout',
+})
 </script>

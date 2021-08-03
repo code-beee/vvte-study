@@ -1,11 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { AbortRequest } from "./abort-request";
-import { CustomRequest, InterceptorConfig } from "./types";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { AbortRequest } from './abort-request'
+import { CustomRequest, InterceptorConfig } from './types'
 
 // ↓自定义axios类
 export class CustomAxios<T> {
   // ↓原生axios对象
-  private instance: AxiosInstance;
+  private instance: AxiosInstance
   // ↓axios请求中止对象
   private abortRequest: AbortRequest
 
@@ -24,65 +24,74 @@ export class CustomAxios<T> {
       interceptorRequest,
       interceptorRequestRejected,
       interceptorResponse,
-      interceptorResponseRejected
-    } = config;
+      interceptorResponseRejected,
+    } = config
 
     // ↓请求拦截器。在请求发送前，对请求配置做一些处理
-    this.instance.interceptors.request.use((config: AxiosRequestConfig) => {
-      // ↓如果开启中止请求功能
-      if (enableAbortRequest) {
-        const pendingKey = this.abortRequest.genPendingKey(config)
-        if (this.abortRequest.cancelRequest(pendingKey)) {
-          this.abortRequest.addPending(config)
+    this.instance.interceptors.request.use(
+      (config: AxiosRequestConfig) => {
+        // ↓如果开启中止请求功能
+        if (enableAbortRequest) {
+          const pendingKey = this.abortRequest.genPendingKey(config)
+          if (this.abortRequest.cancelRequest(pendingKey)) {
+            this.abortRequest.addPending(config)
+          }
         }
-      }
 
-      if (interceptorRequest) {
-        console.log('进入请求拦截器...')
-        return interceptorRequest(config)
+        if (interceptorRequest) {
+          console.log('进入请求拦截器...')
+          return interceptorRequest(config)
+        }
+        return config
+      },
+      (error: any) => {
+        console.log('请求拦截器抛出异常...')
+        if (interceptorRequestRejected) {
+          return interceptorRequestRejected(error)
+        }
+        return Promise.reject(error)
       }
-      return config;
-    }, (error: any) => {
-      console.log('请求拦截器抛出异常...')
-      if (interceptorRequestRejected) {
-        return interceptorRequestRejected(error)
-      }
-      return Promise.reject(error);
-    })
+    )
 
     // ↓响应拦截器。在then、catch之前对响应数据做一些处理
-    this.instance.interceptors.response.use((response: AxiosResponse<T>) => {
-      // ↓如果开启中止请求功能
-      if (enableAbortRequest) {
-        const pendingKey = this.abortRequest.genPendingKey(response.config)
-        this.abortRequest.removePending(pendingKey)
-      }
+    this.instance.interceptors.response.use(
+      (response: AxiosResponse<T>) => {
+        // ↓如果开启中止请求功能
+        if (enableAbortRequest) {
+          const pendingKey = this.abortRequest.genPendingKey(response.config)
+          this.abortRequest.removePending(pendingKey)
+        }
 
-      if (interceptorResponse) {
-        console.log('进入响应拦截器...')
-        return interceptorResponse(response)
+        if (interceptorResponse) {
+          console.log('进入响应拦截器...')
+          return interceptorResponse(response)
+        }
+        return response
+      },
+      (error) => {
+        console.log('响应拦截器抛出异常...')
+        if (interceptorResponseRejected) {
+          return interceptorResponseRejected(error)
+        }
+        return Promise.reject(error)
       }
-      return response;
-    }, error => {
-      console.log('响应拦截器抛出异常...')
-      if (interceptorResponseRejected) {
-        return interceptorResponseRejected(error)
-      }
-      return Promise.reject(error);
-    })
+    )
   }
 
   // ↓request请求
   request(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return new Promise((resolve, reject) => {
-      this.instance.request(config).then((response) => {
-        resolve(response)
-      }).catch((error) => {
-        // TODO 魔法值需配置化
-        const msg = error || '程序内部错误'
-        alert(msg);
-        reject(msg)
-      })
+      this.instance
+        .request(config)
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          // TODO 魔法值需配置化
+          const msg = error || '程序内部错误'
+          alert(msg)
+          reject(msg)
+        })
     })
   }
 

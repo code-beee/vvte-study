@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, Canceler } from "axios"
+import axios, { AxiosRequestConfig, Canceler } from 'axios'
 
 // ↓中止axios请求类
 export class AbortRequest {
@@ -17,7 +17,7 @@ export class AbortRequest {
     // ↓实例化取消令牌，构造函数执行器接受一个取消函数
     config.cancelToken = new axios.CancelToken((canceler) => {
       if (!this.pendingMap.has(pendingKey)) {
-        this.pendingMap.set(pendingKey, canceler);
+        this.pendingMap.set(pendingKey, canceler)
       }
     })
   }
@@ -45,7 +45,6 @@ export class AbortRequest {
       canceler && canceler('重复请求被取消')
       return false
     }
-    return true;
+    return true
   }
-
 }
