@@ -1,12 +1,13 @@
 <template>
-  <div>Footer</div>
+  <div class="footer">Copyright ©2021 CodeBee</div>
 </template>
 
 <style lang="scss" scoped>
 .footer {
-  background-color: #b3c0d1;
-  color: var(--el-text-color-primary);
   text-align: center;
-  line-height: 50px;
+  color: #ccc;
+  line-height: 32px;
+  border-top: 1px solid #dfdfdf;
+  font-size: 12px;
 }
 </style>

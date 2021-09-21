@@ -1,19 +1,19 @@
 <template>
   <el-container>
-    <el-aside width="240px"><Sidebar /></el-aside>
+    <Sidebar />
     <el-container>
-      <el-header height="50px" style="box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.08)"><Header /></el-header>
+      <el-header height="50px"><Header v-model:sidebar-collapse="sidebarCollapse" /></el-header>
       <el-main>
         <!-- ↓layout路由视图 -->
         <router-view></router-view>
       </el-main>
-      <el-footer height="50px" style="box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.08)"><Footer /></el-footer>
+      <Footer />
     </el-container>
   </el-container>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, provide } from 'vue'
 import Sidebar from './sidebar/index.vue'
 import Header from './header/index.vue'
 import Footer from './footer/index.vue'
@@ -21,10 +21,20 @@ import Footer from './footer/index.vue'
 export default defineComponent({
   name: 'Layout',
   components: { Sidebar, Header, Footer },
+  setup() {
+    const sidebarCollapse = ref(false)
+    provide('sidebarCollapse', sidebarCollapse)
+    return {
+      sidebarCollapse,
+    }
+  },
 })
 </script>
 
 <style lang="scss" scoped>
+.el-header {
+  padding: 0;
+}
 .el-main {
   text-align: center;
 }

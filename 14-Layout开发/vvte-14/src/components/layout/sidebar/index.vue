@@ -1,10 +1,10 @@
 <template>
-  <div style="height: 100vh">
-    <div style="text-align: center; height: 50px; line-height: 50px; padding: 0 15px">
-      <img src="@/assets/logo-100.png" width="32" height="32" style="vertical-align: middle; margin-right: 10px" />
-      <span style="font-weight: bold; color: #555; font-size: 16px">Code-Bee管理系统</span>
-    </div>
-    <el-menu default-active="1-1" class="menu" @open="handleOpen" @close="handleClose">
+  <div class="sidebar">
+    <el-menu default-active="1-1" class="menu" :collapse="sidebarCollapse">
+      <div class="logo">
+        <img src="@/assets/logo-100.png" width="32" height="32" />
+        <span v-show="!sidebarCollapse"> Code-Bee管理系统</span>
+      </div>
       <el-sub-menu index="1">
         <template #title>
           <i class="el-icon-menu"></i>
@@ -29,26 +29,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 
 export default defineComponent({
   setup() {
-    const handleOpen = (key: number | string, keyPath: number | string) => {
-      console.log(key, keyPath)
-    }
-    const handleClose = (key: number | string, keyPath: number | string) => {
-      console.log(key, keyPath)
-    }
+    const sidebarCollapse = ref(inject('sidebarCollapse'))
     return {
-      handleOpen,
-      handleClose,
+      sidebarCollapse,
     }
   },
 })
 </script>
 
 <style lang="scss" scoped>
-.menu {
-  border-right: unset;
+.sidebar {
+  height: 100vh;
+  box-shadow: 2px 0px 6px 0px rgba(0, 0, 0, 0.1);
+  .menu {
+    border-right: unset;
+    .logo {
+      height: 50px;
+      line-height: 50px;
+      padding: 0 10px;
+      overflow: hidden;
+      img {
+        vertical-align: middle;
+        margin-left: 6px;
+      }
+      span {
+        font-weight: bold;
+        font-size: 16px;
+      }
+    }
+  }
+  .menu:not(.el-menu--collapse) {
+    width: 240px;
+  }
 }
 </style>

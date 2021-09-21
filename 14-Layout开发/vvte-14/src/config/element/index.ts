@@ -1,10 +1,8 @@
 import { App } from 'vue'
 import {
   ElContainer,
-  ElAside,
   ElHeader,
   ElMain,
-  ElFooter,
   ElInput,
   ElButton,
   ElMenu,
@@ -12,14 +10,15 @@ import {
   ElMenuItem,
   ElIcon,
   ElAvatar,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu,
 } from 'element-plus'
 
 const components = [
   ElContainer,
-  ElAside,
   ElHeader,
   ElMain,
-  ElFooter,
   ElInput,
   ElButton,
   ElMenu,
@@ -27,10 +26,21 @@ const components = [
   ElMenuItem,
   ElIcon,
   ElAvatar,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
 ]
+
+import { CaretBottom, Expand, Fold } from '@element-plus/icons'
+
+const icons = [Fold, Expand, CaretBottom]
 
 export function useElementComponents(app: App): void {
   components.forEach((component) => {
     app.component(component.name, component)
+  })
+
+  icons.forEach((icon) => {
+    app.component(icon.name, icon)
   })
 }
