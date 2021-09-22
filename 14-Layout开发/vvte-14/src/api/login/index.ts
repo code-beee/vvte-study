@@ -5,4 +5,9 @@ export default {
   signin: (data?: any) => {
     return http.post('/login/signin', data)
   },
+
+  // ↓查询用户信息
+  userInfo: () => {
+    return http.get('/login/userInfo')
+  },
 }

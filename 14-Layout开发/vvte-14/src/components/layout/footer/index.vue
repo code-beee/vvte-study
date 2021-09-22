@@ -2,6 +2,14 @@
   <div class="footer">Copyright ©2021 CodeBee</div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'Footer',
+})
+</script>
+
 <style lang="scss" scoped>
 .footer {
   text-align: center;

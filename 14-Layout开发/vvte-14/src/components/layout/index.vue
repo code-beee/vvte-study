@@ -21,9 +21,13 @@ import Footer from './footer/index.vue'
 export default defineComponent({
   name: 'Layout',
   components: { Sidebar, Header, Footer },
+
   setup() {
+    // ↓侧边栏折叠
     const sidebarCollapse = ref(false)
+    // ↓提供给sidebar注入
     provide('sidebarCollapse', sidebarCollapse)
+
     return {
       sidebarCollapse,
     }

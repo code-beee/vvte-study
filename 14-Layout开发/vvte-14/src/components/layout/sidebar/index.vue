@@ -5,37 +5,44 @@
         <img src="@/assets/logo-100.png" width="32" height="32" />
         <span v-show="!sidebarCollapse"> Code-Bee管理系统</span>
       </div>
-      <el-sub-menu index="1">
+
+      <el-sub-menu v-for="menu in userInfo.menus" :key="menu.id" :index="menu.id + ''">
         <template #title>
-          <i class="el-icon-menu"></i>
-          <span>权限管理</span>
+          <i :class="menu.icon"></i>
+          <span>{{ menu.name }}</span>
         </template>
-        <el-menu-item index="1-1">用户管理</el-menu-item>
-        <el-menu-item index="1-2">角色管理</el-menu-item>
-        <el-menu-item index="1-3">菜单管理</el-menu-item>
-      </el-sub-menu>
-      <el-sub-menu index="2">
-        <template #title>
-          <i class="el-icon-setting"></i>
-          <span>系统管理</span>
-        </template>
-        <el-menu-item index="2-1">系统字典</el-menu-item>
-        <el-menu-item index="2-2">参数配置</el-menu-item>
-        <el-menu-item index="2-3">通知公告</el-menu-item>
-        <el-menu-item index="2-4">日志审计</el-menu-item>
+        <el-menu-item v-for="sub in menu.children" :key="sub.id" :index="sub.id + ''">{{ sub.name }}</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
+import { defineComponent, inject, onMounted, reactive, ref } from 'vue'
+import loginApi from '@/api/login'
 
 export default defineComponent({
+  name: 'Sidebar',
   setup() {
+    // ↓注入父组件值
     const sidebarCollapse = ref(inject('sidebarCollapse'))
+
+    // TODO 用户信息变量，后续改成从store获取变量
+    const userInfo = reactive({
+      menus: [],
+    })
+
+    onMounted(() => {
+      // ↓查询用户信息
+      loginApi.userInfo().then((res: any) => {
+        const { menus } = res.data
+        userInfo.menus = menus
+      })
+    })
+
     return {
       sidebarCollapse,
+      userInfo,
     }
   },
 })

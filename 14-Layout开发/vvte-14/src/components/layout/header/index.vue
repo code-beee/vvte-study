@@ -11,7 +11,7 @@
 
     <el-dropdown trigger="click">
       <div class="avatar">
-        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+        <el-avatar :src="userInfo.baseInfo.avatar"></el-avatar>
         <el-icon>
           <caret-bottom />
         </el-icon>
@@ -19,7 +19,7 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-right" divided>退出用户</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-right" divided @click="signout">用户登出</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -27,23 +27,50 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import loginApi from '@/api/login'
 
 export default defineComponent({
   name: 'Header',
-  components: {},
+
   props: {
     sidebarCollapse: {
       type: Boolean,
       default: false,
     },
   },
+
   emits: ['update:sidebarCollapse'],
+
   setup(props, { emit }) {
+    const router = useRouter()
+
+    // TODO 用户信息变量，后续改成从store获取变量
+    const userInfo = reactive({
+      baseInfo: {},
+    })
+
+    // ↓sidebar折叠/展开的开关
     const toggle = () => {
+      // ↓修改父组件值
       emit('update:sidebarCollapse', !props.sidebarCollapse)
     }
-    return { toggle }
+    // ↓登出
+    const signout = () => {
+      // TODO 有store变量后需清除store变量
+      router.push('/login')
+    }
+
+    onMounted(() => {
+      // ↓查询用户信息
+      loginApi.userInfo().then((res: any) => {
+        const { baseInfo } = res.data
+        userInfo.baseInfo = baseInfo
+      })
+    })
+
+    return { userInfo, toggle, signout }
   },
 })
 </script>
