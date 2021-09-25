@@ -19,11 +19,13 @@ import { defineComponent, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { errorMessage } from '@/utils/notice/message'
 import loginApi from '@/api/login'
+import { useUserInfoStore } from '@/store/user-info'
 
 export default defineComponent({
   name: 'Login',
   setup() {
     const router = useRouter()
+    const userInfoStore = useUserInfoStore()
 
     // ↓表单数据
     const form = reactive({
@@ -39,8 +41,8 @@ export default defineComponent({
         errorMessage('密码为空')
       } else {
         loginApi.signin(form).then((res: any) => {
-          // TODO 保存用户信息
-          console.log('登录成功，跳转到首页', res)
+          // ↓保存用户信息到store
+          userInfoStore.setAll(res.data)
           router.push('/')
         })
       }

@@ -6,7 +6,7 @@
         <span v-show="!sidebarCollapse"> Code-Bee管理系统</span>
       </div>
 
-      <el-sub-menu v-for="menu in userInfo.menus" :key="menu.id" :index="menu.id + ''">
+      <el-sub-menu v-for="menu in menus" :key="menu.id" :index="menu.id + ''">
         <template #title>
           <i :class="menu.icon"></i>
           <span>{{ menu.name }}</span>
@@ -18,31 +18,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, reactive, ref } from 'vue'
-import loginApi from '@/api/login'
+import { defineComponent, inject, ref } from 'vue'
+import { useUserInfoStore } from '@/store/user-info'
 
 export default defineComponent({
   name: 'Sidebar',
   setup() {
     // ↓注入父组件值
     const sidebarCollapse = ref(inject('sidebarCollapse'))
-
-    // TODO 用户信息变量，后续改成从store获取变量
-    const userInfo = reactive({
-      menus: [],
-    })
-
-    onMounted(() => {
-      // ↓查询用户信息
-      loginApi.userInfo().then((res: any) => {
-        const { menus } = res.data
-        userInfo.menus = menus
-      })
-    })
+    // ↓从store获取用户菜单
+    const menus = useUserInfoStore().menus
 
     return {
       sidebarCollapse,
-      userInfo,
+      menus,
     }
   },
 })

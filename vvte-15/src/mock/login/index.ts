@@ -4,12 +4,10 @@ import Mock from 'mockjs'
 const data = Mock.mock({
   'info|1': [
     {
-      baseInfo: {
-        id: '@INCREMENT()',
-        username: 'admin',
-        name: '超级管理员',
-        avatar: '@IMAGE(100, "#ffc72d", "Code-Bee"),',
-      },
+      id: '@INCREMENT()',
+      username: 'admin',
+      name: '超级管理员',
+      avatar: '@IMAGE(100, "#ffc72d", "Code-Bee"),',
       menus: [
         {
           id: 1,

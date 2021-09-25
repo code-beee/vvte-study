@@ -11,7 +11,7 @@
 
     <el-dropdown trigger="click">
       <div class="avatar">
-        <el-avatar :src="userInfo.baseInfo.avatar"></el-avatar>
+        <el-avatar :src="avatar"></el-avatar>
         <el-icon>
           <caret-bottom />
         </el-icon>
@@ -27,9 +27,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from 'vue'
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import loginApi from '@/api/login'
+import { useUserInfoStore } from '@/store/user-info'
 
 export default defineComponent({
   name: 'Header',
@@ -45,32 +45,22 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const router = useRouter()
+    // ↓从store获取用户头像
+    const avatar = useUserInfoStore().avatar
 
-    // TODO 用户信息变量，后续改成从store获取变量
-    const userInfo = reactive({
-      baseInfo: {},
-    })
-
-    // ↓sidebar折叠/展开的开关
+    // ↓Sidebar折叠/展开的开关
     const toggle = () => {
       // ↓修改父组件值
       emit('update:sidebarCollapse', !props.sidebarCollapse)
     }
     // ↓登出
     const signout = () => {
-      // TODO 有store变量后需清除store变量
+      // ↓将store重置为初始值
+      useUserInfoStore().$reset()
       router.push('/login')
     }
 
-    onMounted(() => {
-      // ↓查询用户信息
-      loginApi.userInfo().then((res: any) => {
-        const { baseInfo } = res.data
-        userInfo.baseInfo = baseInfo
-      })
-    })
-
-    return { userInfo, toggle, signout }
+    return { avatar, toggle, signout }
   },
 })
 </script>
