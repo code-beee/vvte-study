@@ -1,0 +1,36 @@
+{
+  "name": "vvte",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons": "0.0.11",
+    "@types/mockjs": "^1.0.4",
+    "axios": "^0.21.1",
+    "element-plus": "^1.1.0-beta.12",
+    "mockjs": "^1.1.0",
+    "pinia": "^2.0.0-rc.9",
+    "vue": "^3.2.12",
+    "vue-router": "^4.0.10"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.3",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "@vitejs/plugin-vue": "^1.2.5",
+    "@vue/compiler-sfc": "^3.2.12",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-vue": "^7.15.0",
+    "prettier": "^2.3.2",
+    "sass": "^1.36.0",
+    "typescript": "^4.3.2",
+    "vite": "^2.4.3",
+    "vue-tsc": "^0.0.24"
+  }
+}
