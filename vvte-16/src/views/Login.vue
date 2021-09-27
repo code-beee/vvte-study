@@ -19,13 +19,12 @@ import { defineComponent, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { errorMessage } from '@/utils/notice/message'
 import loginApi from '@/api/login'
-import { useUserInfoStore } from '@/store/user-info'
+import { setToken } from '@/utils/token/index'
 
 export default defineComponent({
   name: 'Login',
   setup() {
     const router = useRouter()
-    const userInfoStore = useUserInfoStore()
 
     // ↓表单数据
     const form = reactive({
@@ -41,8 +40,8 @@ export default defineComponent({
         errorMessage('密码为空')
       } else {
         loginApi.signin(form).then((res: any) => {
-          // ↓保存用户信息到store
-          userInfoStore.setAll(res.data)
+          // ↓保存token
+          setToken(res.data.token)
           router.push('/')
         })
       }

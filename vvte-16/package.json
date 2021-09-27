@@ -8,10 +8,14 @@
   },
   "dependencies": {
     "@element-plus/icons": "0.0.11",
+    "@types/js-cookie": "^2.2.7",
     "@types/mockjs": "^1.0.4",
+    "@types/nprogress": "^0.2.0",
     "axios": "^0.21.1",
     "element-plus": "^1.1.0-beta.12",
+    "js-cookie": "^3.0.1",
     "mockjs": "^1.1.0",
+    "nprogress": "^0.2.0",
     "pinia": "^2.0.0-rc.9",
     "vue": "^3.2.12",
     "vue-router": "^4.0.10"

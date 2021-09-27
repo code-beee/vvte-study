@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <el-menu default-active="1-1" class="menu" :collapse="sidebarCollapse">
+    <el-menu default-active="1-1" class="menu" :collapse="sidebarCollapse" router>
       <div class="logo">
         <img src="@/assets/logo-100.png" width="32" height="32" />
         <span v-show="!sidebarCollapse"> Code-Bee管理系统</span>
@@ -11,7 +11,7 @@
           <i :class="menu.icon"></i>
           <span>{{ menu.name }}</span>
         </template>
-        <el-menu-item v-for="sub in menu.children" :key="sub.id" :index="sub.id + ''">{{ sub.name }}</el-menu-item>
+        <el-menu-item v-for="sub in menu.children" :key="sub.id" :index="sub.path + ''">{{ sub.name }}</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>

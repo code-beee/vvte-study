@@ -30,6 +30,7 @@
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserInfoStore } from '@/store/user-info'
+import { removeToken } from '@/utils/token/index'
 
 export default defineComponent({
   name: 'Header',
@@ -57,6 +58,8 @@ export default defineComponent({
     const signout = () => {
       // ↓将store重置为初始值
       useUserInfoStore().$reset()
+      // ↓删除token
+      removeToken()
       router.push('/login')
     }
 
