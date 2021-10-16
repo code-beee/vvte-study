@@ -31,6 +31,7 @@ import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserInfoStore } from '@/store/user-info'
 import { removeToken } from '@/utils/token/index'
+import { join } from 'path/posix'
 
 export default defineComponent({
   name: 'Header',
@@ -60,7 +61,9 @@ export default defineComponent({
       useUserInfoStore().$reset()
       // ↓删除token
       removeToken()
-      router.push('/login')
+      // ↓用router.push或replace会缓存页面，比如由admin切换到普通用户，普通用户在没刷新页面之前仍能看到admin才有权限的页面
+      window.location.href = '/'
+      // router.push('/login')
     }
 
     return { avatar, toggle, signout }

@@ -13,6 +13,8 @@ import {
   ElDropdown,
   ElDropdownItem,
   ElDropdownMenu,
+  ElRadioGroup,
+  ElRadioButton,
 } from 'element-plus'
 
 const components = [
@@ -29,6 +31,8 @@ const components = [
   ElDropdown,
   ElDropdownMenu,
   ElDropdownItem,
+  ElRadioGroup,
+  ElRadioButton,
 ]
 
 import { CaretBottom, Expand, Fold } from '@element-plus/icons'

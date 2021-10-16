@@ -11,7 +11,7 @@ const routes = [
     // ↓路由地址
     path: '/',
     // ↓路由名称（唯一值），在路由跳转时能用到
-    name: '',
+    name: 'root',
     // ↓路由渲染组件
     component: () => import('@/components/layout/index.vue'),
     // ↓重定向
@@ -37,6 +37,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/Login.vue'),
+  },
+  // ↓404
+  {
+    path: '/:catchAll(.*)',
+    name: '404',
+    component: () => import('@/views/error/404.vue'),
   },
 ]
 

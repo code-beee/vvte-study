@@ -24,7 +24,7 @@ export const useUserInfoStore = defineStore('user-info', {
         if (menu.children) {
           menu.children.forEach((sub: any) => {
             // ↓动态添加路由
-            router.addRoute('', {
+            router.addRoute('root', {
               path: sub.path,
               component: modulesRoutes[`/src/views${sub.component}`],
             })

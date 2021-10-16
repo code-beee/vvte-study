@@ -2,8 +2,18 @@
   <div class="bg">
     <div class="panel">
       <div class="panel-left">
+        <el-radio-group v-model="form.username" size="small" style="margin-bottom: 20px">
+          <el-radio-button label="admin"></el-radio-button>
+          <el-radio-button label="zhangsan"></el-radio-button>
+        </el-radio-group>
         <el-input v-model="form.username" class="form-item" placeholder="用户名"></el-input>
-        <el-input v-model="form.password" class="form-item" type="password" placeholder="密码"></el-input>
+        <el-input
+          v-model="form.password"
+          class="form-item"
+          type="password"
+          placeholder="密码"
+          @keyup.enter="signin"
+        ></el-input>
         <el-button class="login-btn" @click="signin">登 录</el-button>
       </div>
       <div class="panel-right">
@@ -28,8 +38,8 @@ export default defineComponent({
 
     // ↓表单数据
     const form = reactive({
-      username: '',
-      password: '',
+      username: 'admin',
+      password: '123456',
     })
 
     // ↓登录
